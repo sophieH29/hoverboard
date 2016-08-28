@@ -101,9 +101,26 @@
 
         is: 'logos-block',
 
+        properties : {
+          _partners : {
+            type : Object,
+            notify: true
+          }
+        },
+
+        observers : [
+          '_partnersChanged(app.partners)'
+        ],
+
         behaviors: [
           HOVERBOARD.LocalizeBehavior
         ],
+
+        _partnersChanged: function() {
+          if (this.app.partners && Object.keys(this.app.partners).length) {
+            this._partners = this.app.partners;
+          }
+        },
 
         _trackClick: function () {
           HOVERBOARD.Analytics.trackEvent('sponsors', 'open proposition', 'Become a partner');

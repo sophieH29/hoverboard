@@ -3,18 +3,145 @@
 
 <link rel="import" href="../../bower_components/polymerfire/firebase-query.html">
 <link rel="import" href="../../bower_components/polymerfire/firebase-document.html">
-<!--<script src="../../bower_components/webcomponentsjs/webcomponents-lite.min.js"></script>-->
+<script src="../../bower_components/webcomponentsjs/webcomponents-lite.min.js"></script>
 <link rel="import" href="../../bower_components/app-storage/app-indexeddb-mirror/app-indexeddb-mirror.html">
 
 
 <dom-module id="app-data">
   <template>
+
+    <firebase-document
+      id="querySpeakers"
+      app-name="hoverboard-dev"
+      path="/speakers"
+      data="{{_firebaseSpeakersRaw}}">
+    </firebase-document>
+
+    <app-indexeddb-mirror
+      session="devfest"
+      key="speakers"
+      data="{{_firebaseSpeakersRaw}}"
+      persisted-data="{{_speakersRaw}}">
+    </app-indexeddb-mirror>
+
+    <firebase-document
+      id="querySessions"
+      app-name="hoverboard-dev"
+      path="/sessions"
+      data="{{_firebaseSessions}}">
+    </firebase-document>
+
+    <app-indexeddb-mirror
+      session="devfest"
+      key="sessions"
+      data="{{_firebaseSessions}}"
+      persisted-data="{{sessions}}">
+    </app-indexeddb-mirror>
+
+    <firebase-document
+      id="querySchedule"
+      app-name="hoverboard-dev"
+      path="/schedule"
+      data="{{_firebaseSchedule}}">
+    </firebase-document>
+
+    <app-indexeddb-mirror
+      session="devfest"
+      key="schedule"
+      data="{{_firebaseSchedule}}"
+      persisted-data="{{_scheduleRaw}}">
+    </app-indexeddb-mirror>
+
+    <!--<firebase-query-->
+      <!--id="queryPosts"-->
+      <!--app-name="hoverboard-dev"-->
+      <!--path="/blog"-->
+      <!--data="{{_firebasePosts}}"-->
+      <!--order-by-key>-->
+    <!--</firebase-query>-->
+
+    <!--<app-indexeddb-mirror-->
+      <!--session="devfest"-->
+      <!--key="blog"-->
+      <!--data="{{_firebasePosts}}"-->
+      <!--persisted-data="{{posts}}">-->
+    <!--</app-indexeddb-mirror>-->
+
+    <!--<firebase-document-->
+      <!--id="queryPartners"-->
+      <!--app-name="hoverboard-dev"-->
+      <!--path="/partners"-->
+      <!--data="{{_firebasePartners}}">-->
+    <!--</firebase-document>-->
+
+    <!--<app-indexeddb-mirror-->
+      <!--session="devfest"-->
+      <!--key="partners"-->
+      <!--data="{{_firebasePartners}}"-->
+      <!--persisted-data="{{app.partners}}">-->
+    <!--</app-indexeddb-mirror>-->
+
+    <!--<firebase-document-->
+      <!--id="queryTeam"-->
+      <!--app-name="hoverboard-dev"-->
+      <!--path="/team"-->
+      <!--data="{{_firebaseTeam}}">-->
+    <!--</firebase-document>-->
+
+    <!--<app-indexeddb-mirror-->
+      <!--session="devfest"-->
+      <!--key="team"-->
+      <!--data="{{_firebaseTeam}}"-->
+      <!--persisted-data="{{app.team}}">-->
+    <!--</app-indexeddb-mirror>-->
+
+    <!--<firebase-document-->
+      <!--id="queryVideos"-->
+      <!--app-name="hoverboard-dev"-->
+      <!--path="/videos"-->
+      <!--data="{{_firebaseVideos}}">-->
+    <!--</firebase-document>-->
+
+    <!--<app-indexeddb-mirror-->
+      <!--session="devfest"-->
+      <!--key="videos"-->
+      <!--data="{{_firebaseVideos}}"-->
+      <!--persisted-data="{{app.videos}}">-->
+    <!--</app-indexeddb-mirror>-->
+
+    <!--<firebase-document-->
+      <!--id="queryConfig"-->
+      <!--app-name="hoverboard-dev"-->
+      <!--path="/config"-->
+      <!--data="{{_firebaseConfig}}">-->
+    <!--</firebase-document>-->
+
+    <!--<app-indexeddb-mirror-->
+      <!--session="devfest"-->
+      <!--key="config"-->
+      <!--data="{{_firebaseConfig}}"-->
+      <!--persisted-data="{{app.data}}">-->
+    <!--</app-indexeddb-mirror>-->
+
+    <!--<firebase-document-->
+      <!--id="queryResources"-->
+      <!--app-name="hoverboard-dev"-->
+      <!--path="/resources">-->
+    <!--</firebase-document>-->
+
+    <!--<app-indexeddb-mirror-->
+      <!--session="devfest"-->
+      <!--key="res"-->
+      <!--data="{{res}}"-->
+      <!--persisted-data="{{app.resources}}">-->
+    <!--</app-indexeddb-mirror>-->
+
     <iron-ajax auto url="[[configSource]]" handle-as="json" last-response="{{app.data}}"></iron-ajax>
-    <iron-ajax auto url="[[speakersSource]]" handle-as="json" last-response="{{_speakersRaw}}"></iron-ajax>
-    <iron-ajax auto url="[[sessionsSource]]" handle-as="json" last-response="{{sessions}}"></iron-ajax>
+    <!--<iron-ajax auto url="[[speakersSource]]" handle-as="json" last-response="{{_speakersRaw}}"></iron-ajax>-->
+    <!--<iron-ajax auto url="[[sessionsSource]]" handle-as="json" last-response="{{sessions}}"></iron-ajax>-->
     <iron-ajax auto url="[[postsSource]]" handle-as="json" on-response="_reversePosts"></iron-ajax>
     <iron-ajax auto url="[[partnersSource]]" handle-as="json" last-response="{{app.partners}}"></iron-ajax>
-    <iron-ajax auto url="[[scheduleSource]]" handle-as="json" last-response="{{_scheduleRaw}}"></iron-ajax>
+    <!--<iron-ajax auto url="[[scheduleSource]]" handle-as="json" last-response="{{_scheduleRaw}}"></iron-ajax>-->
     <iron-ajax auto url="[[teamSource]]" handle-as="json" last-response="{{app.team}}"></iron-ajax>
     <iron-ajax auto url="[[videosSource]]" handle-as="json" last-response="{{app.videos}}"></iron-ajax>
   </template>
@@ -109,6 +236,10 @@
         },
 
         _generateSchedule: function () {
+          if (!Object.keys(this._speakersRaw).length
+            || !Object.keys(this.sessions).length
+            || !Object.keys(this._scheduleRaw).length)
+          { return;}
           this._scheduleRaw.tags = [];
           for (var i = 0, scheduleLen = this._scheduleRaw.length; i < scheduleLen; i++) {
             var day = this._scheduleRaw[i];

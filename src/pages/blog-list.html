@@ -146,6 +146,17 @@
           }
         },
 
+        observers: [
+          '_postsChanged(posts.splices)'
+        ],
+
+        _postsChanged: function () {
+          if (this.posts.length <= 1) {return;}
+          let rawPosts = this.posts;
+          rawPosts.sort(function(a, b){return new Date(b.posted) - new Date(a.posted);});
+          this._posts = rawPosts;
+        },
+
         _updateCascadedNodes() {
           var cascaded = Polymer.dom(this.root).querySelectorAll('[cascaded]');
           var cascadedArray = Array.prototype.slice.call(cascaded);
