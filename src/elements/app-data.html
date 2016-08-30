@@ -1,10 +1,10 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
 
-<link rel="import" href="../../bower_components/polymerfire/firebase-query.html">
-<link rel="import" href="../../bower_components/polymerfire/firebase-document.html">
-<script src="../../bower_components/webcomponentsjs/webcomponents-lite.min.js"></script>
+<link rel="import" href="../../bower_components/polymerfire/polymerfire.html">
 <link rel="import" href="../../bower_components/app-storage/app-indexeddb-mirror/app-indexeddb-mirror.html">
+
+<!--<script src="../../bower_components/webcomponentsjs/webcomponents-lite.min.js"></script>-->
 
 
 <dom-module id="app-data">
@@ -28,7 +28,7 @@
       id="querySessions"
       app-name="hoverboard-dev"
       path="/sessions"
-      data="{{_firebaseSessions}}">
+      data="{{sessions}}">
     </firebase-document>
 
     <app-indexeddb-mirror
@@ -42,7 +42,7 @@
       id="querySchedule"
       app-name="hoverboard-dev"
       path="/schedule"
-      data="{{_firebaseSchedule}}">
+      data="{{_scheduleRaw}}">
     </firebase-document>
 
     <app-indexeddb-mirror
@@ -52,20 +52,20 @@
       persisted-data="{{_scheduleRaw}}">
     </app-indexeddb-mirror>
 
-    <!--<firebase-query-->
-      <!--id="queryPosts"-->
-      <!--app-name="hoverboard-dev"-->
-      <!--path="/blog"-->
-      <!--data="{{_firebasePosts}}"-->
-      <!--order-by-key>-->
-    <!--</firebase-query>-->
+    <firebase-query
+      id="queryPosts"
+      app-name="hoverboard-dev"
+      path="/blog"
+      data="{{_firebasePosts}}"
+      order-by-key>
+    </firebase-query>
 
-    <!--<app-indexeddb-mirror-->
-      <!--session="devfest"-->
-      <!--key="blog"-->
-      <!--data="{{_firebasePosts}}"-->
-      <!--persisted-data="{{posts}}">-->
-    <!--</app-indexeddb-mirror>-->
+    <app-indexeddb-mirror
+      session="devfest"
+      key="blog"
+      data="{{_firebasePosts}}"
+      persisted-data="{{posts}}">
+    </app-indexeddb-mirror>
 
     <!--<firebase-document-->
       <!--id="queryPartners"-->
@@ -139,11 +139,12 @@
     <iron-ajax auto url="[[configSource]]" handle-as="json" last-response="{{app.data}}"></iron-ajax>
     <!--<iron-ajax auto url="[[speakersSource]]" handle-as="json" last-response="{{_speakersRaw}}"></iron-ajax>-->
     <!--<iron-ajax auto url="[[sessionsSource]]" handle-as="json" last-response="{{sessions}}"></iron-ajax>-->
-    <iron-ajax auto url="[[postsSource]]" handle-as="json" on-response="_reversePosts"></iron-ajax>
+    <!--<iron-ajax auto url="[[postsSource]]" handle-as="json" on-response="_reversePosts"></iron-ajax>-->
     <iron-ajax auto url="[[partnersSource]]" handle-as="json" last-response="{{app.partners}}"></iron-ajax>
     <!--<iron-ajax auto url="[[scheduleSource]]" handle-as="json" last-response="{{_scheduleRaw}}"></iron-ajax>-->
     <iron-ajax auto url="[[teamSource]]" handle-as="json" last-response="{{app.team}}"></iron-ajax>
     <iron-ajax auto url="[[videosSource]]" handle-as="json" last-response="{{app.videos}}"></iron-ajax>
+
   </template>
   <script>
     (function () {
@@ -266,6 +267,7 @@
 
         _getSession: function (sessionId, day, dayIndex, schedule) {
           var session = this.sessions[sessionId];
+          if (!session) {return;}
           session.mainTag = session.tags ? session.tags[0] : 'General';
           session.day = dayIndex + 1;
 
@@ -302,12 +304,7 @@
             difference = Math.floor((timeEnd - timeStart) / totalNumber),
             result = new Date(timeStart + difference * number);
           return result.getHours() + ':' + result.getMinutes();
-        },
-
-        _reversePosts: function (response) {
-          this.posts = response.detail.response.reverse();
         }
-
       });
 
     }());
