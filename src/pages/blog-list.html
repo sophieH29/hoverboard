@@ -92,7 +92,7 @@
     </style>
 
     <div class="container posts-container">
-      <template is="dom-repeat" items="[[posts]]" as="post" on-dom-change="_updateCascadedNodes">
+      <template is="dom-repeat" items="[[_posts]]" as="post" on-dom-change="_updateCascadedNodes">
         <a href$="/blog/posts/[[post.id]]/" class="post"
            style$="background-color: [[post.primaryColor]];" cascaded>
           <iron-image class="image" src="[[post.image]]" style$="background-color: [[post.primaryColor]];"
@@ -152,12 +152,12 @@
 
         _postsChanged: function () {
           if (this.posts.length <= 1) {return;}
-          let rawPosts = this.posts;
+          var rawPosts = this.posts;
           rawPosts.sort(function(a, b){return new Date(b.posted) - new Date(a.posted);});
           this._posts = rawPosts;
         },
 
-        _updateCascadedNodes() {
+        _updateCascadedNodes: function() {
           var cascaded = Polymer.dom(this.root).querySelectorAll('[cascaded]');
           var cascadedArray = Array.prototype.slice.call(cascaded);
           this.animationConfig.entry.push({
