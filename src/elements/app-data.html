@@ -13,7 +13,7 @@
     <firebase-document
       id="querySpeakers"
       app-name="hoverboard-dev"
-      path="/gdg-x/speakers"
+      path="/speakers"
       data="{{_firebaseSpeakersRaw}}">
     </firebase-document>
 
@@ -27,7 +27,7 @@
     <firebase-document
       id="querySessions"
       app-name="hoverboard-dev"
-      path="/gdg-x/sessions"
+      path="/sessions"
       data="{{_firebaseSessions}}">
     </firebase-document>
 
@@ -41,7 +41,7 @@
     <firebase-document
       id="querySchedule"
       app-name="hoverboard-dev"
-      path="/gdg-x/schedule"
+      path="/schedule"
       data="{{_firebaseSchedule}}">
     </firebase-document>
 
@@ -55,7 +55,7 @@
     <firebase-query
       id="queryPosts"
       app-name="hoverboard-dev"
-      path="/gdg-x/blog"
+      path="/blog"
       data="{{_firebasePosts}}"
       order-by-key>
     </firebase-query>
@@ -70,7 +70,7 @@
     <firebase-document
       id="queryPartners"
       app-name="hoverboard-dev"
-      path="/gdg-x/partners"
+      path="/partners"
       data="{{_firebasePartners}}">
     </firebase-document>
 
@@ -84,7 +84,7 @@
     <firebase-document
       id="queryTeam"
       app-name="hoverboard-dev"
-      path="/gdg-x/team"
+      path="/team"
       data="{{_firebaseTeam}}">
     </firebase-document>
 
@@ -98,7 +98,7 @@
     <firebase-document
       id="queryVideos"
       app-name="hoverboard-dev"
-      path="/gdg-x/videos"
+      path="/videos"
       data="{{_firebaseVideos}}">
     </firebase-document>
 
@@ -123,18 +123,19 @@
       <!--persisted-data="{{app.data}}">-->
     <!--</app-indexeddb-mirror>-->
 
-    <!--<firebase-document-->
-      <!--id="queryResources"-->
-      <!--app-name="hoverboard-dev"-->
-      <!--path="/resources">-->
-    <!--</firebase-document>-->
+    <firebase-document
+      id="queryResources"
+      app-name="hoverboard-dev"
+      path="/resources"
+      data="{{_firebaseResources}}">
+    </firebase-document>
 
-    <!--<app-indexeddb-mirror-->
-      <!--session="devfest"-->
-      <!--key="res"-->
-      <!--data="{{res}}"-->
-      <!--persisted-data="{{app.resources}}">-->
-    <!--</app-indexeddb-mirror>-->
+    <app-indexeddb-mirror
+      session="devfest"
+      key="res"
+      data="{{_firebaseResources}}"
+      persisted-data="{{app.resources}}">
+    </app-indexeddb-mirror>
 
     <iron-ajax auto url="[[configSource]]" handle-as="json" last-response="{{app.data}}"></iron-ajax>
     <!--<iron-ajax auto url="[[speakersSource]]" handle-as="json" last-response="{{_speakersRaw}}"></iron-ajax>-->
@@ -225,7 +226,7 @@
 
           _scheduleRaw: {
             type: Array
-          }
+          },
         },
 
         observers: [
@@ -236,7 +237,7 @@
           this.app = this.app || {};
         },
 
-        _generateSchedule: function () {
+      _generateSchedule: function () {
           if (!Object.keys(this._speakersRaw).length
             || !Object.keys(this.sessions).length
             || !Object.keys(this._scheduleRaw).length)
