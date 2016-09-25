@@ -4,9 +4,6 @@
 <link rel="import" href="../../bower_components/polymerfire/polymerfire.html">
 <link rel="import" href="../../bower_components/app-storage/app-indexeddb-mirror/app-indexeddb-mirror.html">
 
-<!--<script src="../../bower_components/webcomponentsjs/webcomponents-lite.min.js"></script>-->
-
-
 <dom-module id="app-data">
   <template>
 
@@ -137,15 +134,6 @@
       persisted-data="{{app.resources}}">
     </app-indexeddb-mirror>
 
-    <!--<iron-ajax auto url="[[configSource]]" handle-as="json" last-response="{{app.data}}"></iron-ajax>-->
-    <!--<iron-ajax auto url="[[speakersSource]]" handle-as="json" last-response="{{_speakersRaw}}"></iron-ajax>-->
-    <!--<iron-ajax auto url="[[sessionsSource]]" handle-as="json" last-response="{{sessions}}"></iron-ajax>-->
-    <!--<iron-ajax auto url="[[postsSource]]" handle-as="json" on-response="_reversePosts"></iron-ajax>-->
-    <!--<iron-ajax auto url="[[partnersSource]]" handle-as="json" last-response="{{app.partners}}"></iron-ajax>-->
-    <!--<iron-ajax auto url="[[scheduleSource]]" handle-as="json" last-response="{{_scheduleRaw}}"></iron-ajax>-->
-    <!--<iron-ajax auto url="[[teamSource]]" handle-as="json" last-response="{{app.team}}"></iron-ajax>-->
-    <!--<iron-ajax auto url="[[videosSource]]" handle-as="json" last-response="{{app.videos}}"></iron-ajax>-->
-
   </template>
   <script>
     (function () {
@@ -160,47 +148,7 @@
             notify: true
           },
 
-          configSource: {
-            type: String,
-            value: 'data/hoverboard.config.json'
-          },
-
-          speakersSource: {
-            type: String,
-            value: 'data/speakers.json'
-          },
-
-          sessionsSource: {
-            type: String,
-            value: 'data/sessions.json'
-          },
-
-          postsSource: {
-            type: String,
-            value: 'data/blog.json'
-          },
-
-          partnersSource: {
-            type: String,
-            value: 'data/partners.json'
-          },
-
-          scheduleSource: {
-            type: String,
-            value: 'data/schedule.json'
-          },
-
-          teamSource: {
-            type: String,
-            value: 'data/team.json'
-          },
-
-          videosSource: {
-            type: String,
-            value: 'data/videos.json'
-          },
-
-          speakers: {
+         speakers: {
             type: Array,
             notify: true
           },
